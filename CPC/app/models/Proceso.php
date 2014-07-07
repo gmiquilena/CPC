@@ -5,8 +5,8 @@
 */
 class Proceso extends Eloquent
 {
-	 protected $table = 'proceso';
-	 	 
+	protected $table = 'proceso';
+		 
 }
 
 

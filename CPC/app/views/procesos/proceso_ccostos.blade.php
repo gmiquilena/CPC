@@ -21,7 +21,7 @@
 <table class="tablaFielset">
 	<tr>
 		<th>Centro de Costo:</th>
-		<td><input class="easyui-combobox" name="ccosto" id="comboccosto" data-options="url:'ccostos/combobox',
+		<td><input class="easyui-combobox" name="ccosto" id="comboccosto_{{$key}}" data-options="url:'ccostos/combobox',
                         method:'get',
                         valueField:'id',
                         textField:'nombre',
@@ -33,8 +33,8 @@
 <br>
 
  <div id="toolbar_tareas">
-        <a href="javascript:void(0)" id="btnAdd" disabled="true" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="nuevo_{{$key}}()">Nuevo</a>
-        <a href="javascript:void(0)" id="btnDel" disabled="true" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="eliminar_{{$key}}()">Eliminar</a>
+        <a href="javascript:void(0)" id="btnAdd_{{$key}}" disabled="true" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="nuevo_{{$key}}()">Nuevo</a>
+        <a href="javascript:void(0)" id="btnDel_{{$key}}" disabled="true" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="eliminar_{{$key}}()">Eliminar</a>
     </div>
 
     <table class="easyui-datagrid" id="dgTareas" title="Tareas" style="width:auto;height:250px"
@@ -77,10 +77,8 @@
             <div class="fitem">
                 <label>Duración en Minutos:</label>
                 <input name="duracion" id="dlg_duracion_{{$key}}" required="true" class="easyui-numberbox">
-            </div>
-                 
+            </div>            
                 
-            
         </form>
     </div>
     <div id="dlg-buttons_{{$key}}">
@@ -94,10 +92,10 @@
     var id_json = 0;
     var jsonObj = [];
 
-     $('#comboccosto').combobox({
+     $('#comboccosto_{{$key}}').combobox({
         onSelect: function(param){
-           $('#btnAdd').linkbutton('enable');
-           $('#btnDel').linkbutton('enable');
+           $('#btnAdd_{{$key}}').linkbutton('enable');
+           $('#btnDel_{{$key}}').linkbutton('enable');
         }
     });
 
@@ -108,7 +106,7 @@
 
         var tareasJSON = JSON.stringify(jsonObj);
         var idProceso = $("#idProceso").val();
-        var ccosto = $('#comboccosto').combobox('getValue');
+        var ccosto = $('#comboccosto_{{$key}}').combobox('getValue');
         
         $.post('procesos/crearpccostos', {idProceso: idProceso, ccosto: ccosto, tareas: tareasJSON},
             function(respuesta) {

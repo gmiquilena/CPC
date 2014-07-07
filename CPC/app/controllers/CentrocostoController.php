@@ -47,7 +47,7 @@ class CentrocostoController extends BaseController{
 
         //armando la pagina que se va a mostrar
         $html = View::make('general.cabezera', array('titulo' => 'Centros de Costos'));
-        $html.= View::make('objetos.tablaMaestroDetalleCRUD', $params);
+        $html.= View::make('ccostos.principal', $params);
         $html.= View::make('general.finHtml');
 
         return $html;
@@ -64,8 +64,15 @@ class CentrocostoController extends BaseController{
 		switch ($param) {
 			case 'r':
 				
-				$cc = CentroCosto::all(); 
-		        $total = sizeof($cc);
+				$page = isset($_POST['page']) ? intval($_POST['page']) : 1;
+				$rows = isset($_POST['rows']) ? intval($_POST['rows']) : 10;
+				$sort = isset($_POST['sort']) ? strval($_POST['sort']) : 'codigo';
+				$order = isset($_POST['order']) ? strval($_POST['order']) : 'asc';
+				$offset = ($page-1)*$rows;
+
+				$total = CentroCosto::all()->count();
+				$cc = CentroCosto::orderBy($sort,$order)->take($rows)->skip($offset)->get();
+		       
 		        return '{"total":"'.$total.'","rows":'.$cc.'}';
 				break;
 

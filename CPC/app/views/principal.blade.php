@@ -46,25 +46,32 @@
 		<div region="north" border="false" style="text-align:center;height:40px">
 
 
-				 <div class="easyui-panel" style="padding:5px; width:500px">
-			        <a href="#" class="easyui-menubutton" data-options="menu:'#mm2',iconCls:'icon-proceso'">Administracion</a>
-			        <a href="#" class="easyui-menubutton" data-options="menu:'#mm3'">About</a>
+				<div class="easyui-panel" style="padding:5px; width:500px">
+			        <a href="#" class="easyui-menubutton" data-options="menu:'#mm1',iconCls:'icon-ordenes'">Gestión</a>
+			        <a href="#" class="easyui-menubutton" data-options="menu:'#mm2',iconCls:'icon-proceso'">Administracion</a>			        
 			    </div>
 
+				    <div id="mm1" style="width:180px;">
+				    	
+				        <div><a class="e-link" href="#" onclick="openTab('productos')">Pedidos</a></div>	
+				    	<div><a class="e-link" href="#" onclick="openTab('ccostos')">Orden de Fabricación</a></div>
+		            	<div><a class="e-link" href="#" onclick="openTab('procesos')">Inventario</a></div>				        
+				    </div>
+
+			
 				    <div id="mm2" style="width:180px;">
 				    	<div>
-				            <span>Productos</span>
+				            <span>Maestros</span>
 				            <div>
-				                <div><a class="e-link" href="#" onclick="openTab('productos/agregar')">Crear Producto</a></div>	                
+				                <div><a class="e-link" href="#" onclick="openTab('catalogos/tipo_producto')">Tipos de Productos</a></div>
+				                <div><a class="e-link" href="#" onclick="openTab('catalogos/unidad_medida')">Unidad de Medida</a></div>				                                
 				            </div>
 				        </div>
+				        <div><a class="e-link" href="#" onclick="openTab('productos')">Productos</a></div>	
 				    	<div><a class="e-link" href="#" onclick="openTab('ccostos')">Centros de Costos</a></div>
 		            	<div><a class="e-link" href="#" onclick="openTab('procesos')">Procesos de Fabricación</a></div>				        
 				    </div>
-				    <div id="mm3" class="menu-content" style="background:#f0f0f0;padding:10px;text-align:left">
-				        <img src="http://www.jeasyui.com/images/logo1.png" style="width:150px;height:50px">
-				        <p style="font-size:14px;color:#444;">Try jQuery EasyUI to build your modern, interactive, javascript applications.</p>
-				    </div>
+				
 				
 
 			<!--
@@ -82,12 +89,12 @@
 				</table>
 			-->
 			
-		</div>
-		<div region="west" split="true" title="Alertas" style="width:250px;padding:5px;">
+		<!--</div>
+		<div region="west" split="true" title="Alertas" style="width:250px;padding:5px;">-->
 				
 		</div>
 		<div region="center">
 			<div id="tt" class="easyui-tabs" fit="true" border="false" plain="true">
-				<div title="Escritorio" href=""></div>
+				<div href="escritorio" data-options="iconCls:'icon-home'"></div>
 			</div>
 		</div>

@@ -5,7 +5,7 @@
 */
 class VistaCcostosTareas extends Eloquent
 {
-	 protected $table = 'view_ccostos_tareas_tree';
+	 protected $table = 'vista_ccostos_tareas_tree';
 	 	 
 }
 
