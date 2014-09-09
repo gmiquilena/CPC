@@ -5,17 +5,22 @@
 */
 class CentroCosto extends Eloquent
 {
-	 protected $table = 'centro_costo';
+	protected $table = 'centro_costo';
 	 
-	 public function conceptosGastos()
+	public function conceptosGastos()
 	    {
 	        return $this->hasMany('ConceptoGasto');
 	    }
 
-	 public function maquinas()
+	public function maquinas()
 	    {
 	        return $this->hasMany('Maquina');
 	    }
+
+	public function tipoCentroCosto()
+    {
+        return $this->belongsTo('TipoCentroCosto');
+    }
 
 	 
 }

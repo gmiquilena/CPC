@@ -5,3 +5,25 @@
 .in-disabled{
  background-color: #FFFFFF;
 }
+
+.tabla-reporte table { border-collapse: collapse; text-align: left; width: 100%; } 
+
+.tabla-reporte {font: normal 12px/150% Arial, Helvetica, sans-serif; background: #fff; overflow: hidden; border: 1px solid #006699; -webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px; }
+
+.tabla-reporte table td, .tabla-reporte table th { padding: 3px 10px; }
+
+.tabla-reporte table thead th {background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #007CBA), color-stop(1, #0072AB) );background:-moz-linear-gradient( center top, #007CBA 5%, #0072AB 100% );filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#007CBA', endColorstr='#0072AB');background-color:#007CBA; color:#FFFFFF; font-size: 15px; font-weight: bold; border-left: 1px solid #0070A8; } 
+
+.tabla-reporte table thead th:first-child { border: none; }
+
+.tabla-reporte table tbody td { color: #000000; border-left: 1px solid #E1EEF4;font-size: 12px;font-weight: normal; }
+
+.tabla-reporte table tbody .alt td { background: #E1EEF4; color: #000000; }
+
+.tabla-reporte table tbody td:first-child { border-left: none; }
+
+.tabla-reporte table tbody tr:last-child td { border-bottom: none; }
+
+.tablaForm TD{
+    padding: 5px;
+}

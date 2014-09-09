@@ -14,11 +14,45 @@ h2 {
     margin-bottom:15px;
 }
 .demo-info{
-	background:#FFFEE6;
-	color:#8F5700;
-	padding:12px;
+	background: #FCFCFF;
+	border: 1px solid #0943F8;	
+	padding: 12px;
+	margin: 2px;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
 }
-.demo-tip{
+
+.demo-alert{
+	background: #FFFEF4;
+	border: 1px solid #9B9B01;
+	padding: 12px;
+	margin: 2px;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
+}
+
+
+.demo-critico{
+	background: #FFF4F4;
+	border: 1px solid #9B0101;
+	padding: 12px;
+	margin: 2px;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
+}
+
+.div-mensaje{
+	text-align: left;
+}
+.div-mensaje a{
+	text-decoration: none;
+	color: #000000;
+}
+
+.demo-tip{	
 	width:16px;
 	height:16px;
 	margin-right:8px;

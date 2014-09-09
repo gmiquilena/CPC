@@ -82,3 +82,23 @@
 .icon-home{
 	background:url('icons/home.png') no-repeat center center;
 }
+
+.icon-info{
+	background:url('icons/info.png') no-repeat center center;
+}
+
+.icon-alerta{
+	background:url('icons/alerta.png') no-repeat center center;
+}
+
+.icon-critico{
+	background:url('icons/critico.png') no-repeat center center;
+}
+
+.icon-config{
+	background:url('icons/config.png') no-repeat center center;
+}
+
+.icon-persona{
+	background:url('icons/persona.png') no-repeat center center;
+}

@@ -10,7 +10,11 @@
 		<th>Codigo</th>		
 	    <td>{{$proceso->codigo}}<td>
 	    <th>Nombre:<th>
-	    <td>{{$proceso->nombre}}<td>		
+	    <td>{{$proceso->nombre}}<td>
+        <th>Tipo de Producto:<th>
+        <td>{{$tipo_producto}}<td>
+        <th>Sub-Tipo Producto:<th>
+        <td>{{$sub_tipo_producto}}<td>    
 	</tr>
 	</table>
 </fieldset>
@@ -21,24 +25,24 @@
 <table class="tablaFielset">
 	<tr>
 		<th>Centro de Costo:</th>
-		<td><input class="easyui-combobox" name="ccosto" id="comboccosto_{{$key}}" data-options="url:'ccostos/combobox',
-                        method:'get',
-                        valueField:'id',
-                        textField:'nombre',
-                        panelHeight:'auto',
-         "></td>
+		<td><input class="easyui-combobox" name="ccosto" id="comboccosto_{{$key}}" data-options='data:{{$ccostosJSON}},
+                        method:"get",
+                        valueField:"id",
+                        textField:"nombre",
+                        panelHeight:"auto",
+         '></td>
 	</tr>	
 </table>
 </fieldset>
 <br>
 
- <div id="toolbar_tareas">
+ <div id="toolbar_tareas_{{$key}}">
         <a href="javascript:void(0)" id="btnAdd_{{$key}}" disabled="true" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="nuevo_{{$key}}()">Nuevo</a>
         <a href="javascript:void(0)" id="btnDel_{{$key}}" disabled="true" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="eliminar_{{$key}}()">Eliminar</a>
     </div>
 
     <table class="easyui-datagrid" id="dgTareas" title="Tareas" style="width:auto;height:250px"
-        fitColumns="true" rownumbers="true" toolbar="#toolbar_tareas"
+        fitColumns="true" rownumbers="true" toolbar="#toolbar_tareas_{{$key}}"
         singleSelect="true" pagination="false">
         <thead>
             <tr>

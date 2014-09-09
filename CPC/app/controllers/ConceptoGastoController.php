@@ -17,7 +17,7 @@ class ConceptoGastoController extends BaseController{
 				$cg = CentroCosto::find($id)->conceptosGastos; 				
 
 				if(sizeof($cg)==0){
-					return $cg;	
+					return '{"total":0,"rows":[],"footer":[]}';
 				} 
 
 				$total_mano_obra = 0;

@@ -65,8 +65,32 @@ class ProcesoController extends BaseController{
         $id=Input::get('id');
         $proceso = Proceso::find($id);
 
+        $ccostos=CentroCosto::all();
+        $pccostos=$proceso->procesoCcosto;
+
+       	
+        foreach ($ccostos as $ccosto) {
+        	$sw=true;
+
+        	foreach ($pccostos as $pccosto) {		
+        	
+        		if($pccosto->centro_costo_id==$ccosto->id){
+        			$sw=false;
+        			break;
+        		}
+        	}
+
+        	if($sw)
+        	$listaCcosto[] = json_decode($ccosto);
+
+        }
+
+
         //parametros para la vista de la tablaBasica        
-        $params =  array('key' => $key, 'proceso' => $proceso);
+        $params =  array('key' => $key, 'proceso' => $proceso, 
+			        	 'tipo_producto' => $proceso->subTipoProducto->tipoProducto->nombre,
+			        	 'sub_tipo_producto' => $proceso->subTipoProducto->nombre,
+			        	 'ccostosJSON' => json_encode($listaCcosto));
 
 
         $html= View::make('procesos.proceso_ccostos',$params);
@@ -92,11 +116,18 @@ class ProcesoController extends BaseController{
 				$order = isset($_POST['order']) ? strval($_POST['order']) : 'asc';
 				$offset = ($page-1)*$rows;
 
-				$total = Proceso::all()->count();
-				$proceso = Proceso::orderBy($sort,$order)->take($rows)->skip($offset)->get();
+				
+				$procesos = Proceso::orderBy($sort,$order)->take($rows)->skip($offset)->get();
+				$total = sizeof($procesos);
 
+				foreach ($procesos as $proceso) {
+			
+				$lista[] = array('id' => $proceso->id, 'codigo' => $proceso->codigo , 'nombre' => $proceso->nombre,
+							 'descripcion' => $proceso->descripcion , 'tipo_producto' => $proceso->subTipoProducto->tipoProducto->nombre,
+							 'sub_tipo_producto' => $proceso->subTipoProducto->nombre);
+				}
 					    
-		        return '{"total":"'.$total.'","rows":'.$proceso.'}';
+		        return '{"total":"'.$total.'","rows":'.json_encode($lista).'}';
 				break;
 
 			case 'c':
@@ -105,6 +136,7 @@ class ProcesoController extends BaseController{
 				$proceso->codigo = Input::get('codigo');
 				$proceso->nombre = Input::get('nombre');
 				$proceso->descripcion = Input::get('descripcion');
+				$proceso->sub_tipo_producto_id=Input::get('sub_tipo_producto');
 				$proceso->save();
 				echo json_encode(array('success'=>true));
 				break;
@@ -116,6 +148,7 @@ class ProcesoController extends BaseController{
 				$proceso->codigo = Input::get('codigo');
 				$proceso->nombre = Input::get('nombre');
 				$proceso->descripcion = Input::get('descripcion');
+				$proceso->sub_tipo_producto_id=Input::get('sub_tipo_producto');
 				$proceso->save();
 				echo json_encode(array('success'=>true));
 				break;
@@ -135,7 +168,12 @@ class ProcesoController extends BaseController{
 
 	function comboBox(){
 
-		echo Proceso::all();
+		$stp=Input::get('sub_tipo_producto_id');
+
+		if($stp!="")
+		echo Proceso::where('sub_tipo_producto_id','=',$stp)->get();
+		else
+		echo Proceso::all();	
 
 	}
 
@@ -182,9 +220,14 @@ class ProcesoController extends BaseController{
 	function treeGridCcostos(){
 		$idProceso = Input::get('id');
 
-		 $pccostos = ProcesoCcosto::where('proceso_id','=',$idProceso)->get();
+		$pccostos = ProcesoCcosto::where('proceso_id','=',$idProceso)->get();
 
-		 foreach ($pccostos as $pccosto) {
+		if(sizeof($pccostos)==0)
+			return '{"total":0,"rows":[],"footer":[]}';
+
+		$final_tiempo_total=0;
+
+		foreach ($pccostos as $pccosto) {
 
 		 	$ccosto = $pccosto->centroCosto;
 
@@ -200,17 +243,24 @@ class ProcesoController extends BaseController{
 					$tiempoTotal+=$tarea->duracion;
 		 		}
 
+		 	$final_tiempo_total+=$tiempoTotal;	
+		 		
 		 	$tg[] = array('id' => $pccosto->id,'nombre' => $ccosto->nombre, 
 					'descripcion' => $ccosto->descripcion, 'duracion' => $tiempoTotal,
-					'_parentId' => null,
+					'_parentId' => 0,
 					'state' => 'closed');
 		 		 	
 		 }
 
+		 $footer = array('nombre' => 'Total', 
+					'duracion' => $final_tiempo_total,				
+					'iconCls' => 'icon-sum');
 		 		 
 		 $total = sizeof($tg);
 		 $tg = json_encode($tg);
-		 return '{"total":"'.$total.'","rows":'.$tg.'}';	
+		 $footer = json_encode($footer);
+
+		 return '{"total":"'.$total.'","rows":'.$tg.',"footer":['.$footer.']}';	
 	}
 
 
@@ -439,6 +489,28 @@ class ProcesoController extends BaseController{
 		 $costos = array("costo_mo"=>round($costo_mo,2),"costo_gf"=>round($costo_gf,2));
 		 			 		 
 		 return json_encode($costos);
+
+	}
+
+	function ccostosProceso(){
+
+		 $idProceso = Input::get('id');
+
+		 if ($idProceso==0)
+		 	return '[]';
+
+		 $proceso = Proceso::find($idProceso);
+
+		 $pccostos = $proceso->procesoCcosto;
+
+
+		 foreach ($pccostos as $pcc) {
+		 	
+		 	$lista[] = array('id' => $pcc->centroCosto->id, 'nombre' => $pcc->centroCosto->nombre);
+
+		 }
+
+		 return json_encode($lista);
 
 	}
 	

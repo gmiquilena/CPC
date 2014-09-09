@@ -7,7 +7,7 @@ class SubTipoProducto extends Eloquent
 {
 	protected $table = 'sub_tipo_producto';
 
-	public function TipoProducto()
+	public function tipoProducto()
     {
       return $this->belongsTo('TipoProducto');
     }

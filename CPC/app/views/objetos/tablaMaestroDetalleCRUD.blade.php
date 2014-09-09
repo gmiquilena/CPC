@@ -231,7 +231,7 @@
                 $('#dlg_d{{$key}}').dialog('open');
 
                 $('#fm_d{{$key}}').form('load',row);
-                url_d{{$key}} = '{{$detalle->url}}?param=u&id='+row.id;
+                url_d{{$key}} = '{{$detalle->url}}?param=u&idMaestro='+idMaestro+'&id='+row.id;
             }
         }
         function guardar_d{{$key}}(){

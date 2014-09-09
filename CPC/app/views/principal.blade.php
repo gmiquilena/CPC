@@ -48,14 +48,15 @@
 
 				<div class="easyui-panel" style="padding:5px; width:500px">
 			        <a href="#" class="easyui-menubutton" data-options="menu:'#mm1',iconCls:'icon-ordenes'">Gestión</a>
-			        <a href="#" class="easyui-menubutton" data-options="menu:'#mm2',iconCls:'icon-proceso'">Administracion</a>			        
+			        <a href="#" class="easyui-menubutton" data-options="menu:'#mm2',iconCls:'icon-config'">Administracion</a>			        
 			    </div>
 
 				    <div id="mm1" style="width:180px;">
 				    	
-				        <div><a class="e-link" href="#" onclick="openTab('productos')">Pedidos</a></div>	
-				    	<div><a class="e-link" href="#" onclick="openTab('ccostos')">Orden de Fabricación</a></div>
-		            	<div><a class="e-link" href="#" onclick="openTab('procesos')">Inventario</a></div>				        
+				        <div><a class="e-link" href="#" onclick="openTab('pedidos')">Pedidos</a></div>	
+				    	<div><a class="e-link" href="#" onclick="openTab('catalogos/inventario')">Inventario</a></div>
+				    	<div><a class="e-link" href="#" onclick="openTab('orden_produccion')">Orden de Producción</a></div>
+				    	<div><a class="e-link" href="#" onclick="openTab('orden_produccion/produccion')">Producción</a></div>				        
 				    </div>
 
 			
@@ -64,7 +65,8 @@
 				            <span>Maestros</span>
 				            <div>
 				                <div><a class="e-link" href="#" onclick="openTab('catalogos/tipo_producto')">Tipos de Productos</a></div>
-				                <div><a class="e-link" href="#" onclick="openTab('catalogos/unidad_medida')">Unidad de Medida</a></div>				                                
+				                <div><a class="e-link" href="#" onclick="openTab('catalogos/unidad_medida')">Unidad de Medida</a></div>
+				                <div><a class="e-link" href="#" onclick="openTab('catalogos/cliente')">Clientes</a></div>				                                
 				            </div>
 				        </div>
 				        <div><a class="e-link" href="#" onclick="openTab('productos')">Productos</a></div>	
@@ -95,6 +97,6 @@
 		</div>
 		<div region="center">
 			<div id="tt" class="easyui-tabs" fit="true" border="false" plain="true">
-				<div href="escritorio" data-options="iconCls:'icon-home'"></div>
+				<div href="escritorio" data-options="iconCls:'icon-home'" title="Inicio"></div>
 			</div>
 		</div>

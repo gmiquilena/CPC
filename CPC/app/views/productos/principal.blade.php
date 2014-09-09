@@ -23,7 +23,7 @@
     </div>
 
 
-     <div class="easyui-panel" id="ficha_{{$key}}" title="Ficha de Producto" collapsed="false" collapsible="true" style="width:auto">
+     <div class="easyui-panel" id="ficha_{{$key}}" title="Ficha de Producto" collapsed="true" collapsible="true" style="width:auto">
         <div style="padding:10px 10px 10px 10px">
             <table>
                 <tr>
@@ -56,10 +56,11 @@
                 <tr>
                     <th data-options="field:'codigo',width:50">Codigo</th>
                     <th data-options="field:'nombre',width:120,">Descripción</th>
+                    <th data-options="field:'ccosto_consumo',width:50">C. Costo de Consumo</th>
                     <th data-options="field:'unidad_medida',width:50">Unidad</th>
                     <th data-options="field:'cantidad',width:50,align:'right'">Cantidad</th>
                     <th data-options="field:'costo_unitario',width:50,align:'right'">Costo Unitario</th>
-                    <th data-options="field:'costo_total',width:50,align:'right'">Costo Total</th>
+                    <th data-options="field:'costo_total',width:50,align:'right',formatter:formatCosto">Costo Total</th>
 
                 </tr>
             </thead>
@@ -165,7 +166,7 @@
                         
                         costo_total+=costo_mo+costo_gf;
 
-                        $("#costo_total_{{$key}}").val(costo_total);
+                        $("#costo_total_{{$key}}").val(redondeo(costo_total,2));
                         $("#costo_unidad_{{$key}}").val(redondeo(costo_total/lote,2));
                         
                     //ActualizarCostoUnidad_{{$key}}();                    

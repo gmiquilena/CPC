@@ -11,6 +11,11 @@ class Materiales extends Eloquent
     {
       return $this->belongsTo('Producto');
     }
+
+    public function CentroCosto()
+    {
+      return $this->belongsTo('CentroCosto');
+    }
 	
 }
 

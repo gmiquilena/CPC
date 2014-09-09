@@ -16,6 +16,17 @@ class Producto extends Eloquent
     {
         return $this->hasOne('FichaProducto');
     }
+
+    public function subTipoProducto()
+    {
+      return $this->belongsTo('SubTipoProducto');
+    }
+
+    public function inventario()
+    {
+        return $this->hasOne('Inventario');
+    }
+
   
 }
 

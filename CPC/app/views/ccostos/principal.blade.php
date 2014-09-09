@@ -29,12 +29,13 @@
                    <label>{{$columna->titulo}}:</label>
 
                    @if($columna->select=="true")
-                       <input class="easyui-combobox" name="{{$columna->campo}}" data-options="url:'{{$columna->urlSelect}}',
+                       <select class="easyui-combobox" style="width:150px" name="{{$columna->campo}}" data-options="url:'{{$columna->urlSelect}}',
                         method:'get',
                         valueField:'id',
                         textField:'nombre',
                         panelHeight:'auto',
                        ">
+                        </select>
 
                    @else
                         <input name="{{$columna->campo}}" class="{{$columna->class}}" 
@@ -43,7 +44,8 @@
 
                 </div>
                 @endif
-            @endforeach
+            @endforeach            
+
         </form>
     </div>
     <div id="dlg-buttons_{{$key}}">

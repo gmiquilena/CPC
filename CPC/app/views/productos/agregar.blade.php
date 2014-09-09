@@ -21,6 +21,23 @@
                     </select>
                     </td>
 
+                    <td>Sub Tipo de Producto:</td>
+                    <td>
+                        <select id="sub_tipo_producto_{{$key}}" class="easyui-combogrid" style="width:80px" data-options="
+                            panelWidth: 500,
+                            idField: 'id',
+                            textField: 'codigo',
+                            method: 'get',
+                            columns: [[
+                                {field:'codigo',title:'Codigo',width:80},
+                                {field:'nombre',title:'nombre',width:120},                                
+                            ]],
+                            fitColumns: true
+                            ">
+                    </select>
+                    </td>
+
+                    <!--- SCRIPT DE LOS COMBOS PARA ARMAR EL CODIGO -->
                     <script>
                         $('#tipo_producto_{{$key}}').combogrid({
                             onSelect: function(){
@@ -44,26 +61,23 @@
                                   $("#codigo_{{$key}}").val(rtp.codigo+"-"+r.codigo+"-"+data);
                                 });
 
+                              $('#comboprocesos_{{$key}}').combogrid({url:'procesos/combobox?sub_tipo_producto_id='+r.id});
+
+                              $('#centro_costo_{{$key}}').combobox('reload','procesos/ccostos_proceso?id=0');
+                              $('#centro_costo_{{$key}}').combobox('setValue','');
+
+
+                               costo_total_{{$key}}-=costo_mo_{{$key}}+costo_gf_{{$key}};
+                               $("#costo_total_{{$key}}").val(redondeo(costo_total_{{$key}},2));
+                               ActualizarCostoUnidad_{{$key}}();
+
+                                costo_mo_{{$key}} = 0;
+                                costo_gf_{{$key}} = 0;                    
+
                             }
                         });
                     </script>
-
-
-                    <td>Sub Tipo de Producto:</td>
-                    <td>
-                        <select id="sub_tipo_producto_{{$key}}" class="easyui-combogrid" style="width:80px" data-options="
-                            panelWidth: 500,
-                            idField: 'id',
-                            textField: 'codigo',
-                            method: 'get',
-                            columns: [[
-                                {field:'codigo',title:'Codigo',width:80},
-                                {field:'nombre',title:'nombre',width:120},                                
-                            ]],
-                            fitColumns: true
-                            ">
-                    </select>
-                    </td>
+                    <!--- -->
 
                     <td>Codigo:</td>
                     <td><input class="easyui-validatebox textbox in-disabled" disabled="true" type="text" id="codigo_{{$key}}" name="codigo" data-options="required:true"></input></td>
@@ -73,7 +87,8 @@
                 <tr>
 
                     <td>Nombre:</td>
-                    <td colspan="3"><input class="easyui-validatebox textbox" type="text" name="nombre_prod" id="nombre_prod_{{$key}}" data-options="required:true" style="width:445px"/></td>
+                    <td colspan="3"><input class="easyui-validatebox solo-mayusculas" type="text" name="nombre_prod" id="nombre_prod_{{$key}}" data-options="required:true" style="width:445px"/></td>
+
 
                     <td>Unidad de Medida:</td>
                     <td>
@@ -92,16 +107,25 @@
                     <td>Stock Max:</td>
                     <td><input id="stock_max_{{$key}}" class="easyui-numberbox in-numerico" data-options="min:0,precision:3"></td>
                     <td>Crear Ficha de Producto:</td>
-                    <td><input type="checkbox"  id="check_ficha_{{$key}}"></td>
+                    <td><input type="checkbox"  id="check_ficha_{{$key}}"></td>                    
+                </tr>
+
+                <tr>
+                    <td class="td_costo">Costo del Producto:</td>
+                    <td class="td_costo"><input id="costo_{{$key}}" class="easyui-numberbox in-numerico" data-options="min:0,precision:2"></td>
                 </tr>   
                 
                 <script>
                     $("#check_ficha_{{$key}}").click(function() {
                             
-                            if($(this).is(':checked'))
+                            if($(this).is(':checked')){
                                 $('#ficha_{{$key}}').panel('expand',true);
-                            else
+                                $('.td_costo').css('display','none');
+                                }
+                            else{
                                 $('#ficha_{{$key}}').panel('collapse',true);
+                                $('.td_costo').css('display','');
+                                }
                                 
                         });                      
                 </script>
@@ -118,13 +142,19 @@
                 <tr>
                     <td>Proceso:</td>
                     <td>
-                        <select class="easyui-combobox" style="width:155px" name="procesos" id="comboprocesos_{{$key}}" data-options="url:'procesos/combobox',
-                            method:'get',
-                            valueField:'id',
-                            textField:'nombre',
-                            panelHeight:'auto',
-                             ">
+                        <select id="comboprocesos_{{$key}}" class="easyui-combogrid" style="width:150px" data-options="
+                            panelWidth: 500,
+                            idField: 'id',
+                            textField: 'nombre',
+                            method: 'get',
+                            columns: [[
+                                {field:'codigo',title:'Codigo',width:80},
+                                {field:'nombre',title:'nombre',width:120},                                
+                            ]],
+                            fitColumns: true
+                            ">
                         </select>
+
                     </td>
                     <td>Lote:</td>
                     <td><input  class="easyui-numberbox" type="text" value="1" name="lote" id="lote_{{$key}}" data-options="required:true"/></td>
@@ -151,7 +181,7 @@
                             panelWidth: 500,
                             idField: 'id',
                             textField: 'nombre',
-                            url: 'productos/combobox',
+                            url: 'productos/listar_productos?mat=s',
                             method: 'get',
                             columns: [[
                                 {field:'codigo',title:'Codigo',width:80},
@@ -166,6 +196,14 @@
                 <td>Cantidad:</td>
                 <td>
                     <input name="cantidad" id="cantidad_{{$key}}" class="easyui-numberbox" data-options="min:0,precision:3">
+                </td>
+
+                <td>
+                    C. Costos de Consumo:
+                </td> 
+                <td>
+                 <input class="easyui-combobox" id="centro_costo_{{$key}}" 
+                        data-options="method:'get',valueField:'id',textField:'nombre', panelHeight:'auto'"> 
                 </td>
                 <td>
                     <a href="javascript:void(0)" id="btnAdd" disabled="true" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="agregar_material_{{$key}}();"></a>
@@ -183,10 +221,11 @@
                 <tr>
                     <th data-options="field:'codigo',width:50">Codigo</th>
                     <th data-options="field:'nombre',width:120,">Descripción</th>
+                    <th data-options="field:'ccosto_consumo',width:50,">C. Costo de Consumo</th>
                     <th data-options="field:'unidad_medida',width:50">Unidad</th>
                     <th data-options="field:'cantidad',width:50,align:'right'">Cantidad</th>
                     <th data-options="field:'costo_unitario',width:50,align:'right'">Costo Unitario</th>
-                    <th data-options="field:'costo_total',width:50,align:'right'">Costo Total</th>
+                    <th data-options="field:'costo_total',width:50,align:'right',formatter:formatCosto">Costo Total</th>
 
                 </tr>
             </thead>
@@ -273,22 +312,30 @@
              
         }
 
-        $('#comboprocesos_{{$key}}').combobox({
-            onSelect: function(param){
-               $('#tgManoObra_{{$key}}').treegrid({url:'procesos/tree_ccostos_mo?id='+param.id});
+        $('#comboprocesos_{{$key}}').combogrid({
+            onSelect: function(){
+               
+               var r = $(this).datagrid('getSelected');
+
+               $('#tgManoObra_{{$key}}').treegrid({url:'procesos/tree_ccostos_mo?id='+r.id});
                $('#tgManoObra_{{$key}}').treegrid('reload'); 
 
-               $('#tgFabricacion_{{$key}}').treegrid({url:'procesos/tree_ccostos_gf?id='+param.id});
-               $('#tgFabricacion_{{$key}}').treegrid('reload');               
+               $('#tgFabricacion_{{$key}}').treegrid({url:'procesos/tree_ccostos_gf?id='+r.id});
+               $('#tgFabricacion_{{$key}}').treegrid('reload');
 
-               $.getJSON('procesos/costo_proceso?id='+param.id,{format: "json"},function( data ) {
+               $('#centro_costo_{{$key}}').combobox('reload','procesos/ccostos_proceso?id='+r.id);
+
+
+               $.getJSON('procesos/costo_proceso?id='+r.id,{format: "json"},function( data ) {
                     
+                    costo_total_{{$key}}-=costo_mo_{{$key}}+costo_gf_{{$key}};
+
                     costo_mo_{{$key}} = data['costo_mo'];
                     costo_gf_{{$key}} = data['costo_gf'];
                     
                     costo_total_{{$key}}+=costo_mo_{{$key}}+costo_gf_{{$key}};
 
-                    $("#costo_total_{{$key}}").val(costo_total_{{$key}});
+                    $("#costo_total_{{$key}}").val(redondeo(costo_total_{{$key}},2));
                     ActualizarCostoUnidad_{{$key}}();                    
 
                  });
@@ -316,6 +363,8 @@
           
             if($("#cantidad_{{$key}}").val()=="") return;
 
+            if($('#centro_costo_{{$key}}').combobox('getValue')=="") return;
+
             var g = $('#cg_{{$key}}').combogrid('grid'); // get datagrid object
             var r = g.datagrid('getSelected');  // get the selected row
 
@@ -330,6 +379,8 @@
             item ["id"] = r.id;
             item ["codigo"] = r.codigo;
             item ["nombre"] = r.nombre;
+            item ["ccosto_id"] = $('#centro_costo_{{$key}}').combobox('getValue');
+            item ["ccosto_consumo"] = $('#centro_costo_{{$key}}').combobox('getText');
             item ["unidad_medida"] = r.unidad_medida;
             item ["cantidad"] = $("#cantidad_{{$key}}").val();
             item ["costo_unitario"] = r.costo_unitario;
@@ -348,6 +399,7 @@
 
             $('#cg_{{$key}}').combogrid('setValue',' ');
             $("#cantidad_{{$key}}").numberbox('clear');
+            $('#centro_costo_{{$key}}').combobox('setValue','');
 
 
             costo_total_{{$key}}+=item ["costo_total"];
@@ -374,7 +426,7 @@
             
                 
             var aux = JSON.stringify(jsonObj_{{$key}});          
-            var obj = jQuery.parseJSON( '{"rows":'+aux+',"footer":[{"codigo":"Costo Total Materiales:","costo_total":"'+costo_materiales_{{$key}}+'"}]}' );
+            var obj = jQuery.parseJSON( '{"rows":'+aux+',"footer":[{"codigo":"Costo Total Materiales:","costo_total":"'+redondeo(costo_materiales_{{$key}},2)+'"}]}' );
                         
 
             costo_total_{{$key}}-=restar;
@@ -427,6 +479,8 @@
                 return;
             }
 
+            var costo_unitario = $("#costo_{{$key}}").val();
+
             if(check_ficha){
 
                 var proceso=$('#comboprocesos_{{$key}}').combobox('getValue');
@@ -441,14 +495,20 @@
                     return;
                 }
 
-                var materialesJSON = JSON.stringify(jsonObj_{{$key}});                                                
+                var materialesJSON = JSON.stringify(jsonObj_{{$key}});
+                
+                var costo_unitario = $("#costo_unidad_{{$key}}").val();                                                
 
             }
+
+
+           
+           
 
             // Realizamos la petición al servidor
             
             $.post('productos/guardar_producto', {stock_min: stock_min, stock_max: stock_max,check_ficha: check_ficha,
-                sub_tipo_prod: sub_tipo_prod, materiales: materialesJSON,
+                sub_tipo_prod: sub_tipo_prod, materiales: materialesJSON,costo_unitario: costo_unitario,
                 codigo: codigo, nombre: nombre, unidad_medida: unidad_medida, proceso: proceso, lote: lote_{{$key}}},
                 function(respuesta) {
                      mensajeInfo(respuesta);
@@ -460,5 +520,11 @@
             );
  
         }
+
+
+        $(".solo-mayusculas").on("keyup", function(event) {
+            mayus($(this),event);
+        });
+
 
         </script>  

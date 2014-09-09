@@ -16,8 +16,12 @@ class CentrocostoController extends BaseController{
         $codigo = new ColumnaCRUD("Codigo","codigo","true","true","","20px");
         $nombre = new ColumnaCRUD("Nombre","nombre","true","true");
         $descripcion = new ColumnaCRUD("Descripción","descripcion");
+        $tipo = new ColumnaCRUD("Tipo", "tipo");
+
+        $tipo->select="true";
+        $tipo->urlSelect="catalogos/tipo_ccostosCRUD?param=r";
        
-        $colMaestro = array($codigo,$nombre,$descripcion);
+        $colMaestro = array($codigo,$nombre,$tipo,$descripcion);
         
 
         //definicion de parametros de la tabla
@@ -29,7 +33,7 @@ class CentrocostoController extends BaseController{
         $codigo = new ColumnaCRUD("Codigo","codigo","true","true","","20px");
         $nombre = new ColumnaCRUD("Nombre","nombre","true","true");
         $descripcion = new ColumnaCRUD("Descripción","descripcion");
-       
+
         $colDetalle = array($codigo,$nombre,$descripcion);
         
 
@@ -72,8 +76,16 @@ class CentrocostoController extends BaseController{
 
 				$total = CentroCosto::all()->count();
 				$cc = CentroCosto::orderBy($sort,$order)->take($rows)->skip($offset)->get();
-		       
-		        return '{"total":"'.$total.'","rows":'.$cc.'}';
+		       	
+				foreach ($cc as $c) {
+					
+					$lista[] = array('id' => $c->id, 'codigo' => $c->codigo, 'nombre' => $c->nombre, 'descripcion' => $c->descripcion,
+									 'tipo' => $c->tipoCentroCosto->nombre);
+
+
+				}
+
+		        return '{"total":"'.$total.'","rows":'.json_encode($lista).'}';
 				break;
 
 			case 'c':
@@ -82,6 +94,7 @@ class CentrocostoController extends BaseController{
 				$cc->codigo = Input::get('codigo');
 				$cc->nombre = Input::get('nombre');
 				$cc->descripcion = Input::get('descripcion');
+				$cc->tipo_centro_costo_id = Input::get('tipo');
 				$cc->save();
 				echo json_encode(array('success'=>true));
 				break;
@@ -93,6 +106,7 @@ class CentrocostoController extends BaseController{
 				$cc->codigo = Input::get('codigo');
 				$cc->nombre = Input::get('nombre');
 				$cc->descripcion = Input::get('descripcion');
+				$cc->tipo_centro_costo_id = Input::get('tipo');
 				$cc->save();
 				echo json_encode(array('success'=>true));
 				break;
@@ -113,6 +127,12 @@ class CentrocostoController extends BaseController{
 	function comboBox(){
 
 		echo CentroCosto::all();
+
+	}
+
+	function comboBoxProductivo(){
+
+		echo CentroCosto::where('tipo_centro_costo_id','=',1)->get();
 
 	}
 

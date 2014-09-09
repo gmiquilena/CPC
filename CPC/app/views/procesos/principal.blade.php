@@ -5,11 +5,13 @@
             rownumbers="true" fitColumns="true" singleSelect="true">
         <thead>
             <tr>
-                @foreach($colMaestro as $columna)
-     
-                 {{"<th field='$columna->campo' width='$columna->ancho'>".$columna->titulo."</th>";}}
-
-                @endforeach 
+   
+                <th data-options="field:'codigo',width:50" sortable="true">Codigo</th>
+                <th data-options="field:'nombre',width:80" sortable="true">Nombre</th>
+                <th data-options="field:'descripcion',width:100">Descripción</th> 
+                <th data-options="field:'tipo_producto',width:80">Tipo de Producto</th>
+                <th data-options="field:'sub_tipo_producto',width:80">Sub-Tipo Producto</th> 
+                
             </tr>
         </thead>
     </table>
@@ -19,32 +21,71 @@
         <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="eliminar_{{$key}}()">Eliminar</a>
     </div>
     
-    <div id="dlg_{{$key}}" class="easyui-dialog" style="width:400px;height:280px;padding:10px 20px"
+    <div id="dlg_{{$key}}" class="easyui-dialog" style="width:450px;height:300px;padding:10px 20px"
             closed="true" buttons="#dlg-buttons_{{$key}}">
         <div class="ftitle">{{$maestro->tituloForm}}</div>
         <form id="fm_{{$key}}" method="post" novalidate>
            
-            @foreach($colMaestro as $columna)            
-                @if($columna->editable=="true")
-                <div class="fitem">
-                   <label>{{$columna->titulo}}:</label>
+                <table>
+                    <tr>
+                        <td>Codigo:</td>
+                        <td><input name="codigo" class="easyui-validatebox" required="true"></td>
+                    </tr>
+                    <tr>
+                        <td>Nombre:</td>
+                        <td><input name="nombre" class="easyui-validatebox" required="true"></td>
+                    </tr>
+                    <tr>
+                        <td>Descripción:</td>
+                        <td><input name="descripcion"></td>
+                    </tr>
+                   
+                    <tr>
+                        <td>Tipo de Producto:</td>                    
+                        <td><select id="tipo_producto_{{$key}}" required="true" name="tipo_producto" class="easyui-combogrid" style="width:150px" data-options="
+                                panelWidth: 500,
+                                idField: 'id',
+                                textField: 'codigo',
+                                url: 'catalogos/tipo_productoCRUD?param=r',
+                                method: 'get',
+                                columns: [[
+                                    {field:'codigo',title:'Codigo',width:80},
+                                    {field:'nombre',title:'nombre',width:120},                                
+                                ]],
+                                fitColumns: true
+                                ">
+                        </select></td>
+                    </tr>
+                    
+                    <script>
+                        $('#tipo_producto_{{$key}}').combogrid({
+                            onSelect: function(){
+                              
+                             var r = $(this).datagrid('getSelected');
+                             $('#sub_tipo_producto_{{$key}}').combogrid({url:'catalogos/sub_tipo_productoCRUD?param=r&id='+r.id});
 
-                   @if($columna->select=="true")
-                       <input class="easyui-combobox" name="{{$columna->campo}}" data-options="url:'{{$columna->urlSelect}}',
-                        method:'get',
-                        valueField:'id',
-                        textField:'nombre',
-                        panelHeight:'auto',
-                       ">
+                            }
+                        });
+                                              
+                    </script>
 
-                   @else
-                        <input name="{{$columna->campo}}" class="{{$columna->class}}" 
-                          required="{{$columna->required}}" validType="{{$columna->validType}}">
-                   @endif
-
-                </div>
-                @endif
-            @endforeach
+                    <tr>
+                        <td>Sub Tipo de Producto:</td>
+                        <td><select id="sub_tipo_producto_{{$key}}" required="true" name="sub_tipo_producto" class="easyui-combogrid" style="width:150px" data-options="
+                                panelWidth: 500,
+                                idField: 'id',
+                                textField: 'codigo',
+                                method: 'get',
+                                columns: [[
+                                    {field:'codigo',title:'Codigo',width:80},
+                                    {field:'nombre',title:'nombre',width:120},                                
+                                ]],
+                                fitColumns: true
+                                ">
+                        </select></td>
+                    </tr>
+                </table>
+          
         </form>
     </div>
     <div id="dlg-buttons_{{$key}}">
@@ -59,13 +100,13 @@
 
 
 
-<div id="toolbar_tree">
-    <a href="javascript:void(0)" class="easyui-linkbutton" plain="true" iconCls="icon-add" onclick="agregarCcostoTarea();">Agregar</a>
-    <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="">Editar</a>
-    <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="eliminarCcostoTarea()">Eliminar</a>
+<div id="toolbar_tree_{{$key}}">
+    <a href="javascript:void(0)" class="easyui-linkbutton" plain="true" iconCls="icon-add" onclick="agregarCcostoTarea_{{$key}}();">Agregar</a>
+    <!--<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="">Editar</a>-->
+    <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="eliminarCcostoTarea_{{$key}}()">Eliminar</a>
 </div>
 
-<table id="tgTree" class="easyui-treegrid" toolbar="#toolbar_tree" title="Centro de Costo / Tareas" style="width:auto;height:250px"
+<table id="tgTree_{{$key}}" class="easyui-treegrid" toolbar="#toolbar_tree_{{$key}}" showFooter="true" title="Centro de Costo / Tareas" style="width:auto;height:250px"
             data-options="
                 animate: true,
                 fitColumns: true,
@@ -89,28 +130,29 @@
 
         $('#dg_{{$key}}').datagrid({
                 onClickRow: function(index,data){                   
-                  $('#tgTree').treegrid({url:'procesos/treeccostos?id='+data.id});
-                  $('#tgTree').treegrid('reload');
+                  $('#tgTree_{{$key}}').treegrid({url:'procesos/treeccostos?id='+data.id});
+                  $('#tgTree_{{$key}}').treegrid('reload');
                   idMaestro=data.id;
                 }
             });
       
 
-        function agregarCcostoTarea(){
+        function agregarCcostoTarea_{{$key}}(){
             var row = $('#dg_{{$key}}').datagrid('getSelected');
             if (row){
                 reloadTab('procesos/addccostos?id='+idMaestro);
             }
         }
 
-        function eliminarCcostoTarea(){
-            var row = $('#tgTree').treegrid('getSelected');
+        function eliminarCcostoTarea_{{$key}}(){
+            
+            var row = $('#tgTree_{{$key}}').treegrid('getSelected');
             if (row._parentId==0){
                 $.messager.confirm('Confirmar','¿Esta seguro de eliminar el registro Seleccionado?',function(r){
                     if (r){
                         $.post('procesos/eliminarpccostos',{id:row.id},function(result){
                             if (result.success){
-                                $('#tgTree').treegrid('reload');    // reload the user data
+                                $('#tgTree_{{$key}}').treegrid('reload');    // reload the user data
                             } else {
                                 $.messager.show({    // show error message
                                     title: 'Error',
@@ -199,12 +241,13 @@
                 });
             }
         }
+ 
     </script>
 
     <style type="text/css">
         #fm_d{{$key}}{
             margin:0;
-            padding:10px 30px;
+            padding:10px 30px;            
         }
         #fm_{{$key}}{
             margin:0;
