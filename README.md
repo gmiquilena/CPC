@@ -1,2 +1,0 @@
-# CPC
-Proyecto CPC 
